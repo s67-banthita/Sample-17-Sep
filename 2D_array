@@ -3,6 +3,8 @@ boolean[][] isFlipped;
 int[][] selectedIndices = {{-1, -1}, {-1, -1}}; 
 int matches = 0;
 boolean isMatching = false;
+boolean delayStarted = false;
+int delayStartTime;
 
 void settings() {
   size(500, 500); 
@@ -55,10 +57,33 @@ void draw() {
           int lineY = y + cardHeight / 2 - 20;
           line(lineX, lineY, lineX, lineY + 60); 
         }
+        strokeWeight(1);
       }
     }
   }
+  
+  if (isMatching && !delayStarted) {
+    delayStarted = true;
+    delayStartTime = millis(); 
+  }
+  
+  if (delayStarted && millis() - delayStartTime > 1000) {
+    if (numbers[selectedIndices[0][0]][selectedIndices[0][1]].equals(numbers[selectedIndices[1][0]][selectedIndices[1][1]])) {
+      matches++;
+    } else {
+      isFlipped[selectedIndices[0][0]][selectedIndices[0][1]] = false;
+      isFlipped[selectedIndices[1][0]][selectedIndices[1][1]] = false;
+    }
+
+    selectedIndices[0][0] = -1;
+    selectedIndices[0][1] = -1;
+    selectedIndices[1][0] = -1;
+    selectedIndices[1][1] = -1;
+    isMatching = false;
+    delayStarted = false;
+  }
 }
+
 
 void mousePressed() {
   int cardWidth = width / 4; 
