@@ -1,4 +1,8 @@
 Integer[][] numbers; 
+boolean[][] isFlipped; 
+int[][] selectedIndices = {{-1, -1}, {-1, -1}}; 
+int matches = 0;
+boolean isMatching = false;
 
 void settings() {
   size(500, 500); 
@@ -19,5 +23,67 @@ void setup() {
       k++;
     }
   }
+  
+  isFlipped = new boolean[4][3]; 
+  for (int i = 0; i < isFlipped.length; i++) {
+    for (int j = 0; j < isFlipped[i].length; j++) {
+      isFlipped[i][j] = false;
+    }
+  }
+}
 
+
+void draw() {
+  background(255);
+  
+  int cardWidth = width / 4; 
+  int cardHeight = height / 3; 
+  
+  // Loop through the 2D array
+  for (int i = 0; i < numbers.length; i++) {
+    for (int j = 0; j < numbers[i].length; j++) {
+      int x = i * cardWidth;
+      int y = j * cardHeight;
+
+      fill(255);
+      rect(x, y, cardWidth, cardHeight);  
+      if (isFlipped[i][j]) { 
+        fill(150); 
+        
+        for (int k = 0; k < numbers[i][j]; k++) {
+          int lineX = x + cardWidth / 2 - 10 + k * 8; 
+          int lineY = y + cardHeight / 2 - 20;
+          line(lineX, lineY, lineX, lineY + 60); 
+        }
+      }
+    }
+  }
+}
+
+void mousePressed() {
+  int cardWidth = width / 4; 
+  int cardHeight = height / 3; 
+
+  for (int i = 0; i < numbers.length; i++) {
+    for (int j = 0; j < numbers[i].length; j++) {
+      int x = i * cardWidth;
+      int y = j * cardHeight;
+
+      if (mouseX > x && mouseX < x + cardWidth &&
+          mouseY > y && mouseY < y + cardHeight && 
+          !isFlipped[i][j]) { 
+        isFlipped[i][j] = true; 
+
+        if (selectedIndices[0][0] == -1) {
+          selectedIndices[0][0] = i;
+          selectedIndices[0][1] = j;
+        } else if (selectedIndices[1][0] == -1) {
+          selectedIndices[1][0] = i;
+          selectedIndices[1][1] = j;
+          isMatching = true; 
+        }
+        break; 
+      }
+    }
+  }
 }
