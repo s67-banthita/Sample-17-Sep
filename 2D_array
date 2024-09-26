@@ -82,10 +82,26 @@ void draw() {
     isMatching = false;
     delayStarted = false;
   }
+  
+  if (matches == 6) { 
+    textSize(50);
+    fill(0);
+    text("You Win!", 200, 250);
+  }
 }
 
 
 void mousePressed() {
+  if (matches == 6) {
+    setup();
+    matches = 0;
+    return;
+  }
+
+  if (isMatching) {
+    return; 
+  }
+  
   int cardWidth = width / 4; 
   int cardHeight = height / 3; 
 
